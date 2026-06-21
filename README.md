@@ -2,6 +2,9 @@
 
 Welcome to the **Customer Churn Predictor** project, a core part of the **DevJam AI Engineer Roadmap under Machine Learning Foundations (P0A-2)**.
 
+<img width="1920" height="1347" alt="image" src="https://github.com/user-attachments/assets/31e60887-ca74-40c6-a7dd-4deef8d99526" />
+
+
 This end-to-end supervised learning classification project is designed to demonstrate how classical Machine Learning models are used to solve critical business problems (retaining customers and optimizing marketing spend) before transitioning into Generative AI and Agentic systems.
 
 ---
