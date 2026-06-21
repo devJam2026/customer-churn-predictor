@@ -1,6 +1,6 @@
 # P0A-2 Customer Churn Predictor (ML Foundations)
 
-Welcome to the **Customer Churn Predictor** project, a core part of the **DevJam AI Engineer Roadmap under Machine Learning Foundations**. 
+Welcome to the **Customer Churn Predictor** project, a core part of the **DevJam AI Engineer Roadmap under Machine Learning Foundations (P0A-2)**.
 
 This end-to-end supervised learning classification project is designed to demonstrate how classical Machine Learning models are used to solve critical business problems (retaining customers and optimizing marketing spend) before transitioning into Generative AI and Agentic systems.
 
@@ -77,6 +77,45 @@ The project uses a realistic, synthetic dataset of 3,500 customers (`data/churn_
 
 ---
 
+## 💻 App Tabs & Dashboard Features
+
+The interactive dashboard is organized into three tabs:
+
+1. **🎯 Predict Customer Churn**: Enter individual customer details (demographics, billing, support interaction) to generate a real-time risk assessment. The tab displays:
+   - A highly readable, color-coded **Prediction Outcome Card**.
+   - An aligned **Churn Probability Gauge** representing the exact calibrated probability.
+   - **Key Churn Drivers** indicating customer pain points.
+   - **Actionable Business Recommendations** for customer success agents.
+2. **📊 Exploratory Data Analysis (EDA)**: Fully interactive visualizations showcasing data trends and correlation patterns including:
+   - Churn Distribution Pie Chart
+   - Churn by Contract Type Bar Chart
+   - Tenure Distribution Box Plot
+   - Monthly Charges histogram
+   - Support Tickets Bar Chart
+   - Usage Frequency Box Plot
+   - Days Since Last Login Box Plot
+   - Correlation Matrix Heatmap for numerical features
+3. **📈 Model Comparison & Insights**: Deep-dive evaluation section featuring:
+   - Model Metrics Table (comparing Logistic Regression, Decision Tree, Random Forest, and Gradient Boosting).
+   - Interactive F1-Score comparison bar chart.
+   - Confusion Matrix for the best performing model.
+   - Feature Importance Bar Chart showing top churn indicators.
+
+---
+
+## 💡 Business Recommendations Logic
+
+Retention workflows are dynamically mapped to specific customer risk factors:
+- **Month-to-month Contract**: Offer a discount incentive to switch to a 1-year or 2-year contract.
+- **High Support Tickets (>3)**: Assign a customer success manager or priority support follow-up.
+- **Low Usage Frequency (<10 days)**: Send onboarding emails, product tips, or usage-based nudges.
+- **High Monthly Charges (>$80)**: Offer plan optimization or loyalty discount.
+- **Long Inactive Period (>15 days since last login)**: Trigger a re-engagement campaign.
+- **Short Tenure (<12 months)**: Provide onboarding support and early-life retention offers.
+- **Low Risk / Stable Customers**: Customer appears stable. Continue regular engagement and monitor usage.
+
+---
+
 ## 🧠 Core Machine Learning Concepts Covered
 
 1. **Missing Value Imputation:** Handled via `SimpleImputer` using column medians for numeric inputs and modes for categorical inputs.
@@ -98,8 +137,6 @@ Models were trained on 2,800 records and evaluated on 700 unseen records:
 | **Gradient Boosting** | 86.00% | 85.64% | 87.98% | 86.79% | 0.938 |
 | **Decision Tree** | 84.86% | 83.68% | 88.25% | 85.90% | 0.912 |
 
-*Logistic Regression achieved the best overall balance (F1-Score: 87.38%), closely followed by Random Forest (which has the highest Churn Recall at 90.16%).*
-
 ---
 
 ## ⚖️ Evaluation Metrics: Business Explanations
@@ -109,6 +146,12 @@ Models were trained on 2,800 records and evaluated on 700 unseen records:
 - **Precision:** Out of all customers flagged as "likely to churn", how many actually churned?
   * *Business Impact:* High Precision ensures we don't waste customer success budgets offering discounts to customers who were going to stay anyway.
 - **F1 Score:** The harmonic mean of Precision and Recall. It is the best single metric to balance both risks.
+- **ROC-AUC:** Measures how well the model separates churners and non-churners.
+
+---
+
+## 📸 Screenshots
+*(Add application screenshots showing live prediction, EDA charts, and metrics dashboard)*
 
 ---
 
@@ -147,7 +190,7 @@ python src/evaluate_model.py
 ### 6. Launch the Interactive Dashboard
 Run the Streamlit application to predict churn and test recommendations:
 ```bash
-streamlit run app/streamlit_app.py
+python -m streamlit run app/streamlit_app.py
 ```
 
 ---
@@ -158,8 +201,13 @@ streamlit run app/streamlit_app.py
 - Deepened understanding of the trade-offs between precision and recall for business problems.
 - Created interactive dashboards that display model outcomes and actionable retention recommendations.
 
+---
+
 ## 🚀 Future Improvements
 - **Real Datasets:** Substitute synthetic data with Kaggle's Telco Churn dataset.
 - **Explainable AI (SHAP):** Integrate SHAP values to explain individual predictions.
+- **Customer Segmentation:** Apply unsupervised clustering to group customers by value and behavior.
+- **Retention Campaign Simulator:** Build a calculator simulating return-on-investment (ROI) of discount campaigns.
 - **Experiment Tracking:** Set up MLflow to log training parameters, model versions, and graphs.
 - **API Endpoint:** Deploy a FastAPI model server to expose `/predict` endpoints.
+- **Deploy on Streamlit Cloud:** Publicly host the app for portfolios.

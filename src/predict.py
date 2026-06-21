@@ -59,46 +59,55 @@ class ChurnPredictor:
         prediction_label = "Likely to Churn" if prob >= 0.50 else "Not Likely to Churn"
         
         # Define risk level
-        if prob < 0.30:
+        # Convert to percentage-based check for consistency (probability * 100)
+        prob_pct = prob * 100
+        if prob_pct < 30.0:
             risk_level = "Low"
-        elif prob < 0.70:
+        elif prob_pct < 60.0:
             risk_level = "Medium"
         else:
             risk_level = "High"
             
         # Determine top factors contributing to churn
-        # We can analyze the individual features of this customer and identify risk drivers
         contributing_factors = []
         recommendations = []
         
         # Check specific indicators
         if customer_data.get('contract_type') == 'Month-to-month':
-            contributing_factors.append("Month-to-month contract type (highest structural churn risk).")
+            contributing_factors.append("Month-to-month contract type increases churn risk because the customer has low commitment.")
             recommendations.append("Offer a discount incentive to switch to a 1-year or 2-year contract.")
             
-        if customer_data.get('support_tickets', 0) >= 3:
-            contributing_factors.append(f"High volume of support tickets ({customer_data['support_tickets']}) indicating customer dissatisfaction.")
-            recommendations.append("Assign a dedicated customer success representative to follow up and resolve outstanding issues.")
+        if customer_data.get('support_tickets', 0) > 3:
+            contributing_factors.append("High number of support tickets may indicate dissatisfaction or unresolved product issues.")
+            recommendations.append("Assign a customer success manager or priority support follow-up.")
             
-        if customer_data.get('tenure_months', 0) <= 6:
-            contributing_factors.append(f"Low tenure ({customer_data['tenure_months']} months). Customer is in the high-risk onboarding phase.")
-            recommendations.append("Send onboarding check-in guides or call to ensure product value is clear.")
+        if customer_data.get('usage_frequency', 30) < 10:
+            contributing_factors.append("Low usage frequency suggests weak product engagement.")
+            recommendations.append("Send onboarding emails, product tips, or usage-based nudges.")
             
-        if customer_data.get('usage_frequency', 30) < 12:
-            contributing_factors.append(f"Low usage frequency ({customer_data['usage_frequency']} active days last month). Customer is disengaged.")
-            recommendations.append("Launch a re-engagement email campaign showcasing key features or benefits.")
+        if customer_data.get('tenure_months', 0) < 12:
+            contributing_factors.append("Short tenure customers are more likely to churn before becoming loyal.")
+            recommendations.append("Provide onboarding support and early-life retention offers.")
+            
+        if customer_data.get('monthly_charges', 0) > 80:
+            contributing_factors.append("High monthly charges may increase price sensitivity.")
+            recommendations.append("Offer plan optimization or loyalty discount.")
             
         if customer_data.get('last_login_days', 0) > 15:
-            contributing_factors.append(f"Customer has not logged in for {customer_data['last_login_days']} days.")
-            recommendations.append("Trigger automated 'We miss you' discount or check-in alert.")
+            contributing_factors.append("Long time since last login suggests declining engagement.")
+            recommendations.append("Trigger a re-engagement campaign.")
             
-        if customer_data.get('internet_service') == 'Fiber optic' and customer_data.get('has_premium_support') == 'No':
-            contributing_factors.append("Using high-speed Fiber Optic internet without Premium Support.")
+        if customer_data.get('has_premium_support') == 'No':
+            contributing_factors.append("Lack of premium support may increase churn risk for customers needing assistance.")
             recommendations.append("Upsell or offer a trial of Premium Support to reduce network issue frustration.")
 
-        # Default recommendation if customer is healthy
-        if not recommendations:
-            recommendations.append("Customer is healthy. Maintain relationship and consider upselling premium plans.")
+        # Default recommendation if risk is low or recommendations are empty
+        if not recommendations or risk_level == "Low":
+            # If there are no recommendations, or if the risk is low, we ensure we have the stable message.
+            if risk_level == "Low":
+                recommendations = ["Customer appears stable. Continue regular engagement and monitor usage."]
+            elif not recommendations:
+                recommendations.append("Customer appears stable. Continue regular engagement and monitor usage.")
             
         return {
             'churn_probability': float(prob),
